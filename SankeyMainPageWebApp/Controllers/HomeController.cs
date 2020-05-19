@@ -14,6 +14,7 @@ namespace SankeyMainPageWebApp.Controllers
     {
         public ActionResult Index()
         {
+            return View();
             HomeTeamAwayTeam htat = GetHomeAndAwayTeamId();
             string htId = htat.HomeTeamId;
             string atId = htat.AwayTeamId;
@@ -152,8 +153,8 @@ namespace SankeyMainPageWebApp.Controllers
                 
             }
 
-            return View(htats);
-
+            //return View(htats);
+            
         }
 
         public ActionResult About()
