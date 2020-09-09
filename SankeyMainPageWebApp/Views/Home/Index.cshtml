@@ -109,6 +109,8 @@
         }
       },
       error: function (xhr, textStatus, errorThrow) {
+        $('#nextSeason').show();
+        $('#awayHomeVs').hide();
         debugger;
       }
     });
@@ -170,7 +172,12 @@
       </div>
     </div>
     <div>
-      <img id="awayTeamLogo" height="100" width="100" /> <b>VS</b> <img id="homeTeamLogo" height="100" width="100" />
+      <div id="awayHomeVs">
+        <img id="awayTeamLogo" height="100" width="100" /> <b>VS</b> <img id="homeTeamLogo" height="100" width="100" />
+      </div>
+      <h1 class="puckDrops" hidden id="nextSeason" style="font-size:70px">
+       See you next season!
+      </h1>
     </div>
     @if (@Model != null)
     {
