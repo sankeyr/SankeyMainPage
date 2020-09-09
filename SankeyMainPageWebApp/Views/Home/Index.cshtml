@@ -2,10 +2,26 @@
   ViewBag.Title = "GoAvsGo";
 }
 
+  <style>
+    .cwm-player {
+      position: relative;
+      padding-bottom: 56.25%;
+      padding-top: 0;
+      height: 0;
+    }
+
+      .cwm-player iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 50%;
+      }
+  </style>
+
 <script>
   $(document).ready(function () {
-    debugger;
-    $('.bibleVerseBr').hide();
+    $('.hockeyBr').hide();
     $.ajax({
       url: 'https://dailyverses.net/get/verse?language=niv&isdirect=1&url=' + window.location.hostname,
       dataType: 'JSONP',
@@ -15,7 +31,7 @@
     });
 
     $('#button').click(function () {
-      $('.hockeyBr, .bibleVerseBr').slideToggle();
+      $('.bibleVerseBr, .hockeyBr').slideToggle();
       if ($('#button')[0].src.indexOf("Avs") >= 0)
         $('#button').attr("src", "../Images/cross.JPG");
       else
@@ -47,6 +63,18 @@
 
     }
 
+    function formatDate(date) {
+      debugger;
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+    }
+
     $.ajax({
       cache: false,
       url: '/Home/GetAvsScheduleInfo',
@@ -73,6 +101,10 @@
         }
         else {
           $('#puckDrop').show();
+          debugger;
+          var d = new Date(gameInfo.GameTimeStart);
+          var df = formatDate(d);
+          $("#gameDateTime").html(df);
           setInterval(function () { makeTimer(gameInfo.GameTimeStart); }, 1000);
         }
       },
@@ -93,10 +125,16 @@
 
 </script>
 
-<img src="~/Images/cross.JPG" class="btnToggle" id="button" />
+<img src="~/Images/AvsLogo.JPG" class="btnToggle" id="button" />
 <div class="bibleVerseBr">
   <div class="bibleVerse">
     <h1 class="dailyVersesWrapper"></h1>
+  </div>
+  <div style="text-align:center;">
+    <p>Live video</p>
+    <iframe src="//www.christianworldmedia.com/3982-3922-/embed-html5/f7/livestream.html" width="600" height="400" scrolling="no"
+            frameborder="0" allowtransparency="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" allow="autoplay; fullscreen">
+    </iframe>
   </div>
 </div>
 
@@ -104,6 +142,10 @@
   @*<input id="btnScheduleStats" class="btn btn-default btn-lg" type="button" value="Schedule" style="color:#A2AAAD" />*@
   <div id="scoreAndStats">
     <div id="puckDrop" hidden>
+      <h1 class="puckDrops" style="font-size:20px;">
+        Game Time:
+      </h1>
+      <div id="gameDateTime" class="puckDrops" style="font-size:20px;"></div>
       <h1 class="puckDrops">Puck Drops In: </h1>
       <div id="timer" class="timer">
         <div id="days" class="timer"></div>
@@ -130,6 +172,8 @@
     <div>
       <img id="awayTeamLogo" height="100" width="100" /> <b>VS</b> <img id="homeTeamLogo" height="100" width="100" />
     </div>
+    @if (@Model != null)
+    {
     <div style="text-align: center;padding-right: 140px;">
       <div style="display:inline-block; color: black">
         <p>Pts:</p>
@@ -351,6 +395,7 @@
         }
       </div>
     </div>
+    }
     @*@foreach (var game in Model.FullSeasonSchedules)
       {
         <div>
